@@ -122,6 +122,8 @@ This represents a practical balance between risk detection and portfolio coverag
 
 The 0.35 threshold reduces the flagged portfolio further to 68.28%, but bad-loan capture falls to 87.40%, meaning it no longer satisfies the 90% business requirement.
 
+The Power BI dashboard presents a separate **0.35 threshold scenario** for executive portfolio review, while the **0.30 threshold is the recommended operating point under the explicit ≥90% bad-loan capture constraint**.
+
 ## Key Business Insights
 
 1. **Risk ranking is effective:** observed bad-loan rates increase substantially from Low Risk to Very High Risk segments.
