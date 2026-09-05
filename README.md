@@ -20,12 +20,16 @@ The analysis uses LendingClub accepted loan data covering 2007–2018.
 
 The raw dataset contained approximately 2.26 million records. After data-quality checks and removal of unresolved loan outcomes, 1.35 million resolved loans were used for the primary risk analysis.
 
-Primary outcomes:
+### Primary Outcomes
 
-- Fully Paid: 1,076,751
-- Charged Off: 268,559
-- Default: 40
-- Overall bad-loan rate: ~19.97%
+| Loan Outcome | Count |
+|---|---:|
+| Fully Paid | 1,076,751 |
+| Charged Off | 268,559 |
+| Default | 40 |
+| **Total Resolved Loans** | **1,345,350** |
+
+The overall bad-loan rate in the resolved modeling population was approximately **19.97%**.
 
 Unresolved/current loan statuses were excluded from the primary target analysis.
 
@@ -53,15 +57,15 @@ A class-weighted Logistic Regression model was developed to address the imbalanc
 
 A temporal validation strategy was used:
 
-- Training: 2007–2015
-- Validation: 2016
-- Test: 2017–2018
+- **Training:** 2007–2015
+- **Validation:** 2016
+- **Test:** 2017–2018
 
-This provides a more realistic assessment than randomly splitting historical lending data.
+A temporal split provides a more realistic assessment of model performance on future lending populations than a random split across historical records.
 
 ## Model Performance
 
-On the held-out 2017–2018 test population:
+The final model was evaluated on the held-out 2017–2018 test population.
 
 | Metric | Result |
 |---|---:|
@@ -71,6 +75,8 @@ On the held-out 2017–2018 test population:
 The model provides useful risk ranking, with observed bad-loan rates increasing consistently across model-generated risk segments.
 
 ## Risk Segmentation
+
+The test population was divided into four risk bands based on model-predicted risk.
 
 | Risk Band | Borrowers | Actual Bad Rate |
 |---|---:|---:|
@@ -95,15 +101,17 @@ Different probability thresholds were evaluated to understand the trade-off betw
 | 0.45 | 51.34% | 73.87% |
 | 0.50 | 42.69% | 65.27% |
 
+As the threshold increases, fewer borrowers are flagged, but the model also misses a larger proportion of bad loans.
+
 ## Business Recommendation
 
 A key business constraint was defined:
 
 > Maintain at least 90% bad-loan capture while reducing the number of borrowers flagged for additional risk review.
 
-Under this constraint, a **0.30 probability threshold** is the highest threshold that still meets the 90% capture requirement.
+Under this constraint, a **0.30 probability threshold** is the highest threshold that still meets the 90% bad-loan capture requirement.
 
-At a 0.30 threshold:
+### At a 0.30 Threshold
 
 - **75.95%** of the test portfolio is flagged
 - **92.05%** of bad loans are captured
@@ -128,10 +136,10 @@ The 0.35 threshold reduces the flagged portfolio further to 68.28%, but bad-loan
 
 ## Tools Used
 
-- **Excel** — analysis and structured output review
-- **MySQL** — business analysis, threshold evaluation, segmentation, and decision logic
-- **Power BI** — interactive risk and portfolio analysis
 - **Python / Scikit-learn** — data preparation, modeling, feature selection, and model evaluation
+- **MySQL** — business analysis, threshold evaluation, segmentation, and decision logic
+- **Excel** — structured analysis and output review
+- **Power BI** — interactive risk and portfolio analysis
 
 ## Project Structure
 
@@ -151,3 +159,27 @@ fintech-credit-risk-analysis/
 │
 └── sql/
     └── fintech_credit_risk_analysis.sql
+```
+
+## Dashboard
+
+The Power BI dashboard presents:
+
+- Model performance
+- Risk segmentation
+- Threshold trade-offs
+- Portfolio impact
+- Bad-loan capture
+- Model governance considerations
+
+![Power BI Dashboard](screenshots/dashboard-powerbi.png)
+
+## Project Files
+
+- [SQL Analysis](sql/fintech_credit_risk_analysis.sql)
+- [Portfolio Impact Analysis](excel/portfolio_impact_analysis.csv)
+- [Power BI Dashboard](powerbi/fintech_credit_risk_dashboard.pbix)
+
+## Business Analytics Takeaway
+
+This project demonstrates how predictive-model outputs can be translated into a practical business decision by connecting **risk modeling, SQL analysis, threshold optimization, and portfolio impact** rather than evaluating model performance in isolation.
